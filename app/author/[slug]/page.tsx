@@ -1,10 +1,11 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Twitter, Linkedin, Instagram, Youtube, Globe, Facebook, Calendar, ArrowLeft } from 'lucide-react';
 import { fetchAuthorDetails } from '@/services/api';
-
-import { Metadata } from 'next';
+import { AuthorResponse } from '@/types';
 
 interface AuthorPageProps {
     params: Promise<{
@@ -12,44 +13,24 @@ interface AuthorPageProps {
     }>;
 }
 
-export const revalidate = 60;
+export default function AuthorPage({ params }: AuthorPageProps) {
+    const { slug } = React.use(params);
+    const [author, setAuthor] = useState<AuthorResponse | null>(null);
+    const [loading, setLoading] = useState(true);
 
-export async function generateMetadata({ params }: AuthorPageProps): Promise<Metadata> {
-    const { slug } = await params;
-    const author = await fetchAuthorDetails(slug);
-
-    if (!author) {
-        return {
-            title: "Author Not Found | India News Hindi"
-        };
-    }
-
-    return {
-        title: `${author.first_name} - Author at India News Hindi`,
-        description: author.bio || `Read articles and news written by ${author.first_name} on India News Hindi.`,
-        alternates: {
-            canonical: `https://indianewshindi.com/author/${slug}`,
-        },
-        openGraph: {
-            title: `${author.first_name} | India News Hindi`,
-            description: author.bio || `Author at India News Hindi`,
-            url: `https://indianewshindi.com/author/${slug}`,
-            type: "profile",
-            images: author.profile_image ? [{ url: author.profile_image }] : [],
-        },
-        twitter: {
-            card: "summary",
-            title: author.first_name,
-            description: author.bio || "",
-            images: author.profile_image ? [author.profile_image] : [],
-            creator: author.twitter ? author.twitter.split('/').pop() : undefined,
+    useEffect(() => {
+        async function loadData() {
+            setLoading(true);
+            const data = await fetchAuthorDetails(slug);
+            setAuthor(data);
+            setLoading(false);
         }
-    };
-}
+        loadData();
+    }, [slug]);
 
-export default async function AuthorPage({ params }: AuthorPageProps) {
-    const { slug } = await params;
-    const author = await fetchAuthorDetails(slug);
+    if (loading) {
+        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    }
 
     if (!author) {
         return (
@@ -62,38 +43,8 @@ export default async function AuthorPage({ params }: AuthorPageProps) {
         );
     }
 
-    // Generate E-E-A-T Person Schema
-    const socialLinks = [
-        author.twitter,
-        author.facebook,
-        author.instagram,
-        author.linkedin,
-        author.youtube,
-        author.website
-    ].filter(Boolean) as string[];
-
-    const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": author.first_name,
-        "url": `https://indianewshindi.com/author/${slug}`,
-        "image": author.profile_image,
-        "jobTitle": "Author",
-        "worksFor": {
-            "@type": "Organization",
-            "name": "India News Hindi"
-        },
-        "sameAs": socialLinks,
-        "description": author.bio
-    };
-
     return (
         <div className="min-h-screen bg-background-light text-neutral-dark">
-            {/* Inject JSON-LD */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
             <main className="max-w-7xl mx-auto px-4 py-8 md:py-12 text-left">
                 {/* Back Button */}
                 <Link href="/" className="inline-flex items-center gap-2 text-neutral-dark/60 hover:text-primary transition-colors mb-6 group">

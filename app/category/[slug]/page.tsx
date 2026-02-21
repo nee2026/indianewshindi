@@ -1,9 +1,12 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight, Calendar, Clock } from "lucide-react";
 import { fetchCategoryPosts } from "@/services/api";
 import { getAbsoluteImageUrl, formatDate } from "@/lib/utils";
-import { Metadata } from "next";
+import { Post } from "@/types";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -11,37 +14,24 @@ interface CategoryPageProps {
     }>;
 }
 
-export const revalidate = 60;
+export default function CategoryPage({ params }: CategoryPageProps) {
+    const { slug } = React.use(params);
+    const [posts, setPosts] = useState<Post[]>([]);
+    const [loading, setLoading] = useState(true);
 
-export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
-    const { slug } = await params;
-
-    // Capitalize slug for a fallback title if needed
-    const fallbackTitle = slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-
-    // Fetch posts to get the actual category name if possible
-    const posts = await fetchCategoryPosts(slug);
-    const categoryName = posts.length > 0 && posts[0].category?.name ? posts[0].category.name : fallbackTitle;
-
-    return {
-        title: `${categoryName} News | India News Hindi`,
-        description: `Read the latest and breaking news in Hindi about ${categoryName} on India News Hindi. Stay updated with top stories.`,
-        alternates: {
-            // Using the slug correctly for canonical
-            canonical: `https://indianewshindi.com/category/${slug}`,
-        },
-        openGraph: {
-            title: `${categoryName} News | India News Hindi`,
-            description: `Read the latest and breaking news in Hindi about ${categoryName} on India News Hindi.`,
-            url: `https://indianewshindi.com/category/${slug}`,
-            type: "website",
+    useEffect(() => {
+        async function loadData() {
+            setLoading(true);
+            const data = await fetchCategoryPosts(slug);
+            setPosts(data);
+            setLoading(false);
         }
-    };
-}
+        loadData();
+    }, [slug]);
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
-    const { slug } = await params;
-    const posts = await fetchCategoryPosts(slug);
+    if (loading) {
+        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    }
 
     if (posts.length === 0) {
         return (
@@ -57,25 +47,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     const otherPosts = posts.slice(1);
     const categoryName = featuredPost.category?.name || slug.replace(/-/g, ' ');
 
-    const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "CollectionPage",
-        "name": `${categoryName} News`,
-        "description": `Read the latest news in Hindi about ${categoryName}.`,
-        "url": `https://indianewshindi.com/category/${slug}`,
-        "publisher": {
-            "@type": "Organization",
-            "name": "India News Hindi"
-        }
-    };
-
     return (
         <main className="max-w-7xl mx-auto px-4 py-8 font-display">
-            {/* Inject JSON-LD */}
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-            />
             {/* Breadcrumb */}
             <div className="flex items-center text-sm text-neutral-500 mb-8 capitalize">
                 <Link href="/" className="hover:text-primary">Home</Link>
@@ -152,15 +125,6 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     </Link>
                 ))}
             </div>
-
-            {/* Pagination / Load More (Placeholder) */}
-            {otherPosts.length > 0 && (
-                <div className="mt-16 text-center">
-                    <button className="px-8 py-3 bg-neutral-100 dark:bg-white/10 text-neutral-dark dark:text-white rounded-full font-bold hover:bg-neutral-200 dark:hover:bg-white/20 transition-colors">
-                        Load More Stories
-                    </button>
-                </div>
-            )}
         </main>
     );
 }

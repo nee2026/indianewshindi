@@ -1,6 +1,6 @@
 import { TickerItem, Top20Post, TrendingPost, HighlightPost, HomeCategorySection } from '../types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL!
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
 
 export interface HomepageData {
     ticker: TickerItem[];
