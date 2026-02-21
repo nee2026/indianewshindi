@@ -18,6 +18,9 @@ interface PageProps {
     }>;
 }
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 60; // optionally revalidate every 60s
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { postId, slug } = await params;
 
