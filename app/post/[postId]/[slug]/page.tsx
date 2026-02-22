@@ -1,140 +1,89 @@
-"use client";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import ArticleClient from "./ArticleClient";
 
-import React, { useEffect, useState } from "react";
-import TableOfContents from "@/components/news/TableOfContents";
-import MobileTableOfContents from "@/components/news/MobileTableOfContents";
-import ArticleHeader from "@/components/news/ArticleHeader";
-import ArticleBody from "@/components/news/ArticleBody";
-import TrendingSidebar from "@/components/news/TrendingSidebar";
-import RelatedPosts from "@/components/news/RelatedPosts";
-import TagList from "@/components/news/TagList";
-import ArticleBottomSection from "@/components/news/ArticleBottomSection";
-import { fetchPostDetails, fetchAuthorDetails, fetchHomepageData } from "@/services/api";
+import { fetchPostDetails } from "@/services/api";
 import { getAbsoluteImageUrl } from "@/lib/utils";
-import { PostDetail, AuthorResponse, Top20Post } from "@/types";
-import Loading from "./loading";
 
 interface PageProps {
-    params: Promise<{
-        postId: string;
-        slug: string;
-    }>;
+  params: Promise<{
+    postId: string;
+    slug: string;
+  }>;
 }
 
-export default function NewsArticlePage({ params }: PageProps) {
-    const { postId, slug } = React.use(params);
-    const [postDetail, setPostDetail] = useState<PostDetail | null>(null);
-    const [authorDetails, setAuthorDetails] = useState<AuthorResponse | null>(null);
-    const [quickReads, setQuickReads] = useState<Top20Post[]>([]);
-    const [loading, setLoading] = useState(true);
+/* ======================================================
+   SEO + LINK PREVIEW METADATA
+====================================================== */
+export async function generateMetadata(
+  { params }: PageProps
+): Promise<Metadata> {
 
-    useEffect(() => {
-        async function loadData() {
-            setLoading(true);
-            try {
-                const details = await fetchPostDetails(postId, slug);
-                if (details) {
-                    setPostDetail(details);
-                    if (details.post.author_slug) {
-                        const author = await fetchAuthorDetails(details.post.author_slug);
-                        setAuthorDetails(author);
-                    }
-                }
-                const homepageData = await fetchHomepageData();
-                if (homepageData && homepageData.top_20) {
-                    setQuickReads(homepageData.top_20.slice(0, 3));
-                }
-            } catch (e) {
-                console.error("Error loading post data", e);
-            } finally {
-                setLoading(false);
-            }
-        }
-        loadData();
-    }, [postId, slug]);
+  // ✅ unwrap params
+  const { postId, slug } = await params;
 
-    if (loading) {
-        return <Loading />
+  try {
+    const data = await fetchPostDetails(postId, slug);
+
+    if (!data) {
+      return { title: "Article Not Found" };
     }
 
-    if (!postDetail) {
-        return (
-            <div className="min-h-screen flex flex-col items-center justify-center text-center p-4">
-                <h1 className="text-3xl font-bold mb-4">Article Not Found</h1>
-                <p>The post you are looking for does not exist or has been removed.</p>
-            </div>
-        );
-    }
+    const post = data.post;
+    const image = getAbsoluteImageUrl(post.feature_image_url);
 
-    const { post, trending_posts, related_posts } = postDetail;
+    return {
+      title: post.title,
+      description: post.intro,
 
-    // Process HTML to extract headings and inject IDs
-    const headings: { id: string; text: string }[] = [];
-    let processedBody = post.body || "";
+      openGraph: {
+        title: post.title,
+        description: post.intro,
+        url: `https://indianewshindi.com/news/${postId}/${slug}`,
+        siteName: "India News Hindi",
+        images: [
+          {
+            url: image,
+            width: 1200,
+            height: 630,
+            alt: post.title,
+          },
+        ],
+        type: "article",
+      },
 
-    processedBody = processedBody.replace(/<h([2-3])([^>]*)>(.*?)<\/h\1>/gi, (match, level, attrs, text) => {
-        const plainText = text.replace(/<[^>]*>/g, "");
-        const id = plainText.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "") || `heading-${headings.length}`;
-        headings.push({ id, text: plainText });
-        return `<h${level} id="${id}"${attrs}>${text}</h${level}>`;
-    });
+      twitter: {
+        card: "summary_large_image",
+        title: post.title,
+        description: post.intro,
+        images: [image],
+      },
+    };
 
-    processedBody = processedBody.replace(/src="(\/media\/[^"]+)"/g, (match, path) => {
-        return `src="https://indianewshindi.com${path}"`;
-    });
+  } catch (error) {
+    console.error("Metadata error:", error);
+    return { title: "India News Hindi" };
+  }
+}
 
-    const featureImage = getAbsoluteImageUrl(post.feature_image_url);
+/* ======================================================
+   PAGE
+====================================================== */
+export default async function Page({ params }: PageProps) {
 
-    return (
-        <div className="bg-white min-h-screen pb-20">
-            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+  // ✅ unwrap params
+  const { postId, slug } = await params;
 
-                    {/* Left Column + Center Column Wrapper */}
-                    <div className="lg:col-span-9 grid grid-cols-1 lg:grid-cols-4 gap-4">
-                        {/* Left Column - Table of Contents (Desktop Sticky) */}
-                        <aside className="hidden lg:block lg:col-span-1">
-                            <div className="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-hide">
-                                <TableOfContents headings={headings} />
-                            </div>
-                        </aside>
+  const data = await fetchPostDetails(postId, slug);
 
-                        {/* Center Column - Main Article */}
-                        <main className="lg:col-span-3">
-                            <ArticleHeader
-                                category={post.category?.name || "News"}
-                                title={post.title}
-                                author={post.author_name || "India News Hindi"}
-                                authorDetails={authorDetails}
-                                publishedAt={post.date}
-                                location={post.location || "New Delhi"}
-                                featuredImage={featureImage}
-                                caption={post.intro}
-                            />
+  if (!data) {
+    notFound();
+  }
 
-                            {/* Mobile TOC */}
-                            <MobileTableOfContents headings={headings} />
-
-                            <ArticleBody htmlContent={processedBody} />
-
-                            <TagList tags={post.tags?.length ? post.tags : (post.custom_seo_keywords || [])} />
-
-                            <RelatedPosts posts={related_posts} />
-                        </main>
-                    </div>
-
-                    {/* Right Column - Trending Posts (Sticky) */}
-                    <aside className="lg:col-span-3">
-                        <TrendingSidebar posts={trending_posts} />
-                    </aside>
-
-                </div>
-                <ArticleBottomSection
-                    author={post.author_name || "India News Hindi"}
-                    authorDetails={authorDetails}
-                    quickReads={quickReads}
-                />
-            </div>
-        </div>
-    );
+  return (
+    <ArticleClient
+      postId={postId}
+      slug={slug}
+    />
+  );
 }
