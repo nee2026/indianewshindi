@@ -1,6 +1,6 @@
 import { TickerItem, Top20Post, TrendingPost, HighlightPost, HomeCategorySection } from '../types';
 
-const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://indianewshindi.com').replace(/\/$/, '');
 
 export interface HomepageData {
     ticker: TickerItem[];
@@ -79,17 +79,22 @@ export async function fetchHomepageData(): Promise<HomepageData> {
     }
 }
 
-export async function fetchPostDetails(id: string, slug: string): Promise<import('../types').PostDetail | null> {
+export async function fetchPostDetails(id: string, slug: string) {
+
+    const url = `${API_BASE_URL}/post/${id}/${slug}/`
+    console.log("SERVER FETCH URL:", url)
+
     try {
-        const response = await fetch(`${API_BASE_URL}/post/${id}/${slug}/`, {
+        const response = await fetch(url, {
             next: { revalidate: 60 },
         });
 
-        if (!response.ok) {
-            return null;
-        }
+        console.log("STATUS:", response.status)
+
+        if (!response.ok) return null;
 
         return await response.json();
+
     } catch (error) {
         console.error("Error fetching post details:", error);
         return null;
