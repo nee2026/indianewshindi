@@ -79,19 +79,28 @@ export async function fetchHomepageData(): Promise<HomepageData> {
     }
 }
 
-export async function fetchPostDetails(id: string, slug: string) {
+export async function fetchPostDetails(
+    id: string,
+    slug: string
+): Promise<import('../types').PostDetail | null> {
 
-    const url = `${API_BASE_URL}/post/${id}/${slug}/`
-    console.log("SERVER FETCH URL:", url)
+    const url = `${API_BASE_URL}/post/${id}/${slug}/`;
 
     try {
         const response = await fetch(url, {
             next: { revalidate: 60 },
+
+            headers: {
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+                "Accept": "application/json",
+            },
         });
 
-        console.log("STATUS:", response.status)
-
-        if (!response.ok) return null;
+        if (!response.ok) {
+            console.error("API returned:", response.status);
+            return null;
+        }
 
         return await response.json();
 
