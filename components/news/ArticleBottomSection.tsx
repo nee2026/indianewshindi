@@ -1,10 +1,10 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { jobs } from '@/data/jobsData';
-import { formatDate, getAbsoluteImageUrl } from '@/lib/utils';
+import { fetchJobs } from '@/services/api';
+import { formatDate, getAbsoluteImageUrl, toTitleCase } from '@/lib/utils';
 import {
     Eye,
     ArrowUpRight,
@@ -17,7 +17,7 @@ import {
     Instagram
 } from 'lucide-react';
 
-import { AuthorResponse, Top20Post } from '@/types';
+import { AuthorResponse, Top20Post, HirexJob } from '@/types';
 
 interface ArticleBottomSectionProps {
     author: string;
@@ -26,9 +26,24 @@ interface ArticleBottomSectionProps {
 }
 
 const ArticleBottomSection: React.FC<ArticleBottomSectionProps> = ({ author, authorDetails, quickReads }) => {
-    console.log("Author Details:", authorDetails);
+    const [apiJobs, setApiJobs] = useState<HirexJob[]>([]);
+
+    useEffect(() => {
+        async function loadJobs() {
+            try {
+                const data = await fetchJobs();
+                if (data && data.results) {
+                    setApiJobs(data.results);
+                }
+            } catch (error) {
+                console.error("Failed to load jobs", error);
+            }
+        }
+        loadJobs();
+    }, []);
+
     // Get first 4 jobs
-    const displayJobs = jobs.slice(0, 4);
+    const displayJobs = apiJobs.slice(0, 4);
 
     // Get author posts from API
     const displayAuthorPosts = authorDetails?.posts || [];
@@ -43,28 +58,27 @@ const ArticleBottomSection: React.FC<ArticleBottomSectionProps> = ({ author, aut
                             <h2 className="hindi-headline text-3xl font-bold border-l-4 border-primary pl-4 text-neutral-dark dark:text-white">
                                 नौकरी <span className="text-sm font-display font-medium text-accent-gray/60 uppercase ml-2">Open Positions</span>
                             </h2>
-                            <Link className="text-primary font-bold text-xs uppercase tracking-widest hover:underline" href="/jobs">View All</Link>
+                            <Link className="text-primary font-bold text-xs uppercase tracking-widest hover:underline" href="/category/job">View All</Link>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {displayJobs.map((job) => (
-                                <div key={job.id} className="group bg-white dark:bg-neutral-dark p-6 rounded-2xl shadow-sm hover:shadow-xl transition-all border border-gray-100 dark:border-white/5 relative overflow-hidden">
+                                <Link href={`/job/${job.id}`} key={job.id} className="group bg-white dark:bg-neutral-dark p-6 rounded-2xl shadow-sm hover:shadow-xl transition-all border border-gray-100 dark:border-white/5 relative overflow-hidden block">
                                     <div className="absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <div className="text-primary bg-primary/10 p-2 rounded-full scale-75">
                                             <Eye size={20} />
                                         </div>
                                     </div>
-                                    <span className="inline-block px-2 py-1 rounded bg-primary text-white text-[10px] font-bold uppercase mb-4">{job.type}</span>
-                                    <h3 className="hindi-headline font-bold text-lg mb-4 leading-tight group-hover:text-primary transition-colors text-neutral-dark dark:text-white">
-                                        {job.title}
+                                    <h3 className="hindi-headline font-bold text-lg mb-4 leading-tight group-hover:text-primary transition-colors text-neutral-dark dark:text-white line-clamp-2">
+                                        {toTitleCase(job.job_title)}
                                     </h3>
-                                    <p className="text-xs text-gray-500 mb-2">{job.organization}</p>
+                                    <p className="text-xs text-gray-500 mb-2 truncate">{job.posted_by}</p>
                                     <div className="flex items-center justify-between mt-auto">
-                                        <span className="text-[10px] font-bold text-accent-gray/50 uppercase tracking-widest">{formatDate(job.deadline) || 'Apply Now'}</span>
+                                        <span className="text-[10px] font-bold text-accent-gray/50 uppercase tracking-widest">{job.expire_date ? `Exp: ${formatDate(job.expire_date)}` : 'Apply Now'}</span>
                                         <span className="inline-flex items-center gap-1 text-primary font-bold text-xs uppercase hover:underline">
-                                            Apply Now <ArrowUpRight size={14} />
+                                            View Details <ArrowUpRight size={14} />
                                         </span>
                                     </div>
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     </div>

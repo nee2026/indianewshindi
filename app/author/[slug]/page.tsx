@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { Twitter, Linkedin, Instagram, Youtube, Globe, Facebook, Calendar, ArrowLeft } from 'lucide-react';
 import { fetchAuthorDetails } from '@/services/api';
 import { AuthorResponse } from '@/types';
+import Loading from './loading';
 
 interface AuthorPageProps {
     params: Promise<{
@@ -29,7 +30,7 @@ export default function AuthorPage({ params }: AuthorPageProps) {
     }, [slug]);
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+        return <Loading />
     }
 
     if (!author) {

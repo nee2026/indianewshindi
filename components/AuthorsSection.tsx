@@ -65,7 +65,7 @@ const AuthorsSection = () => {
                         >
                             <Link
                                 href={`/author/${author.first_name.toLowerCase()}`}
-                                className="absolute inset-0 z-10"
+                                className="absolute inset-0 z-20"
                                 aria-label={`View ${author.first_name}'s profile`}
                             />
 
@@ -73,9 +73,9 @@ const AuthorsSection = () => {
                             <div className="absolute top-0 left-0 w-full h-16 bg-gradient-to-b from-primary/10 to-transparent opacity-100 transition-opacity"></div>
 
                             {/* Image with Ring */}
-                            <div className="relative mb-3 md:mb-6 mt-2">
+                            <div className="relative mb-3 md:mb-6 mt-2 pointer-events-none">
                                 <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full scale-0 group-hover:scale-110 transition-transform duration-500"></div>
-                                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full p-1 bg-gradient-to-br from-white/10 to-white/5 group-hover:from-primary group-hover:to-primary/50 transition-colors duration-500 relative z-10 box-border border border-white/10 group-hover:border-primary/20">
+                                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full p-1 bg-gradient-to-br from-white/10 to-white/5 group-hover:from-primary group-hover:to-primary/50 transition-colors duration-500 relative box-border border border-white/10 group-hover:border-primary/20">
                                     <div className="w-full h-full rounded-full overflow-hidden relative">
                                         {author.profile_image ? (
                                             <Image
@@ -91,13 +91,13 @@ const AuthorsSection = () => {
                                         )}
                                     </div>
                                 </div>
-                                <div className="absolute -bottom-2 right-0 bg-[#321a1a] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm border border-white/10 z-20 group-hover:scale-105 transition-transform">
+                                <div className="absolute -bottom-2 right-0 bg-[#321a1a] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm border border-white/10 group-hover:scale-105 transition-transform">
                                     {author.posts?.length || 0}+
                                 </div>
                             </div>
 
                             {/* Content */}
-                            <div className="relative z-10 w-full">
+                            <div className="relative w-full pointer-events-none">
                                 <h3 className="text-sm md:text-lg font-bold text-primary/80 mb-1 group-hover:text-primary transition-colors truncate w-full">
                                     {author.first_name}
                                 </h3>
@@ -109,7 +109,7 @@ const AuthorsSection = () => {
                                 )}
 
                                 {/* Social Links */}
-                                <div className="hidden md:flex justify-center gap-2 md:gap-3 opacity-80 md:opacity-60 md:group-hover:opacity-100 transition-opacity md:transform md:translate-y-2 md:group-hover:translate-y-0 duration-300 relative z-20">
+                                <div className="hidden md:flex justify-center gap-2 md:gap-3 opacity-80 md:opacity-60 md:group-hover:opacity-100 transition-opacity md:transform md:translate-y-2 md:group-hover:translate-y-0 duration-300 relative z-30 pointer-events-auto">
                                     {author.twitter && (
                                         <a href={author.twitter} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-primary hover:text-white hover:-translate-y-1 transition-all border border-white/10">
                                             <Twitter size={12} />

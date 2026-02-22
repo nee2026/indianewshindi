@@ -7,6 +7,7 @@ import { ChevronRight, Calendar, Clock } from "lucide-react";
 import { fetchCategoryPosts } from "@/services/api";
 import { getAbsoluteImageUrl, formatDate } from "@/lib/utils";
 import { Post } from "@/types";
+import Loading from "./loading";
 
 interface CategoryPageProps {
     params: Promise<{
@@ -30,7 +31,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     }, [slug]);
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+        return <Loading />
     }
 
     if (posts.length === 0) {

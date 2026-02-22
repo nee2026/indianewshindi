@@ -169,3 +169,54 @@ export async function fetchAuthorsList(): Promise<import('../types').AuthorsList
         return null;
     }
 }
+
+export async function fetchJobs(page: number = 1): Promise<import('../types').JobsResponse> {
+    try {
+        const url = page > 1
+            ? `https://thehirex.com/api/jobs/?page=${page}`
+            : "https://thehirex.com/api/jobs/";
+
+        const response = await fetch(url, {
+            next: { revalidate: 60 },
+        });
+
+        if (!response.ok) {
+            return { count: 0, next: null, previous: null, results: [] };
+        }
+
+        const data = await response.json();
+        if (Array.isArray(data)) {
+            return { count: data.length, next: null, previous: null, results: data };
+        }
+        return {
+            count: data.count || 0,
+            next: data.next || null,
+            previous: data.previous || null,
+            results: data.results || []
+        };
+    } catch (error) {
+        console.error("Error fetching jobs:", error);
+        return { count: 0, next: null, previous: null, results: [] };
+    }
+}
+
+export async function fetchJobDetails(id: string, page: number = 1): Promise<import('../types').HirexJob | null> {
+    try {
+        // The direct detail endpoint /jobs/ID/ returns 404, so we must fetch the list
+        // and find the job within the results.
+        const data = await fetchJobs(page);
+
+        if (!data || !data.results) {
+            return null;
+        }
+
+        const job = data.results.find((j: import('../types').HirexJob) => j.id.toString() === id);
+
+        // If not found on the expected page, we could technically search others, 
+        // but for now we trust the page parameter passed from the listing.
+        return job || null;
+    } catch (error) {
+        console.error(`Error fetching job details for ${id} on page ${page}:`, error);
+        return null;
+    }
+}

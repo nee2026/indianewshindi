@@ -12,6 +12,7 @@ import ArticleBottomSection from "@/components/news/ArticleBottomSection";
 import { fetchPostDetails, fetchAuthorDetails, fetchHomepageData } from "@/services/api";
 import { getAbsoluteImageUrl } from "@/lib/utils";
 import { PostDetail, AuthorResponse, Top20Post } from "@/types";
+import Loading from "./loading";
 
 interface PageProps {
     params: Promise<{
@@ -53,7 +54,7 @@ export default function NewsArticlePage({ params }: PageProps) {
     }, [postId, slug]);
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+        return <Loading />
     }
 
     if (!postDetail) {

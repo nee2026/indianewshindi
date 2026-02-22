@@ -17,7 +17,7 @@ export const categories: Category[] = [
     { id: 2, name: 'Business', slug: '/business' },
     { id: 3, name: 'Finance', slug: '/finance' },
     { id: 4, name: 'Health/Medical', slug: '/health' },
-    { id: 5, name: 'Tech', slug: '/tech' },
+    { id: 5, name: 'Tech', slug: '/technology' },
     { id: 6, name: 'Education/Career', slug: '/education' },
     { id: 7, name: 'Law', slug: '/law' },
     { id: 8, name: 'Sports', slug: '/sports' },

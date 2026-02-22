@@ -3,7 +3,6 @@ import HeroSection from "../components/HeroSection";
 import TrendingSlider from "../components/TrendingSlider";
 import CategoryNewsSection from "../components/CategoryNewsSection";
 import HighlightsSection from "../components/HighlightsSection";
-import NewsletterSection from "../components/NewsletterSection";
 import AuthorsSection from "../components/AuthorsSection";
 
 export default function Home() {
@@ -17,7 +16,7 @@ export default function Home() {
         <CategoryNewsSection />
         <HighlightsSection />
         <AuthorsSection />
-        <NewsletterSection />
+        {/* <NewsletterSection /> */}
       </main>
     </>
   );

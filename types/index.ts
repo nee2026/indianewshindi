@@ -61,6 +61,70 @@ export interface Category {
     subCategories?: { name: string; slug: string }[];
 }
 
+export interface HirexJob {
+    id: number;
+    posted_by: string;
+    job_title: string;
+    number_of_openings: number;
+    total_experience: string;
+    minimum_qualification: string;
+    gender_preference: string;
+    english_proficiency: string;
+    salary_min: number;
+    salary_max: number;
+    offers_bonus: boolean;
+    job_description: string;
+    skills: string;
+    additional_info: string;
+    front_description: string | null;
+    job_impression: number;
+    distance_in_kms: number | null;
+    accepts_relocation: boolean;
+    candidates_can_call: boolean;
+    job_timings: string;
+    interview_timings: string;
+    contact_person_name: string;
+    phone_number: string;
+    email: string;
+    contact_person_profile: string;
+    vacancy_frequency: string | null;
+    address: string;
+    pincode: string;
+    keywords: string | null;
+    info: string | null;
+    thumbnail: string;
+    expire_date: string;
+    is_active: boolean;
+    verified_status: number;
+    verification_description: string;
+    verification_remarks: string;
+    created_at: string;
+    updated_at: string;
+    position: number;
+    job_category: number;
+    job_type: number;
+    company: number;
+    country: number;
+    state: number | null;
+    city: number | null;
+    verified_by: number;
+    languages: number[];
+    job_category_display: string;
+    job_type_display: string;
+    country_display: string;
+    state_display: string;
+    city_display: string;
+    languages_display: string[];
+}
+
+export interface JobsResponse {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: HirexJob[];
+}
+
+// Deprecated: Remove or replace usages with HirexJob
 export interface Job {
     id: string;
     title: string;

@@ -3,15 +3,13 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, ArrowUpRight, Briefcase, MapPin, ChevronDown, ChevronUp } from "lucide-react";
+import { Clock, ArrowUpRight, ChevronDown, ChevronUp } from "lucide-react";
 import { fetchHomepageData } from "../services/api";
-import { jobs } from "../data/jobsData";
 import { Top20Post } from "@/types";
-
 import { getAbsoluteImageUrl, formatDate } from "@/lib/utils";
+import JobsSidebar from "./JobsSidebar";
 
 export default function HeroSection() {
-    const [isJobsExpanded, setIsJobsExpanded] = useState(false);
     const [isStoriesExpanded, setIsStoriesExpanded] = useState(false);
     const [top20, setTop20] = useState<Top20Post[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -19,12 +17,13 @@ export default function HeroSection() {
     useEffect(() => {
         async function loadData() {
             try {
-                const data = await fetchHomepageData();
-                if (data.top_20) {
-                    setTop20(data.top_20);
+                const homepageData = await fetchHomepageData();
+
+                if (homepageData && homepageData.top_20) {
+                    setTop20(homepageData.top_20);
                 }
             } catch (error) {
-                console.error("Error loading ticker data:", error);
+                console.error("Error loading hero data:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -33,67 +32,20 @@ export default function HeroSection() {
         loadData();
     }, []);
 
+    // Category grouping logic removed as requested
+
     return (
         <section className="font-display mb-12">
             <div className="grid grid-cols-12 gap-6">
 
-                {/* Left Column: Jobs (Government & Private) */}
+                {/* Left Column: Jobs */}
                 <div className="col-span-12 lg:col-span-3 order-2 lg:order-1 flex flex-col gap-6">
-                    <div className="bg-white dark:bg-neutral-dark rounded-2xl p-5 border border-black/5 dark:border-white/5 shadow-soft h-auto lg:h-[34rem] flex flex-col">
-                        <div className="flex items-center justify-between mb-4">
-                            <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-primary">
-                                <Briefcase size={16} />
-                                New Jobs
-                            </h4>
-                            <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">10 New</span>
-                        </div>
-
-                        <div className="flex-1 overflow-y-auto pr-2 space-y-4 scrollbar-hide">
-                            {jobs.map((job, idx) => (
-                                <div
-                                    key={job.id}
-                                    className={`group p-3 rounded-xl bg-neutral-50 dark:bg-white/5 border border-transparent hover:border-primary/20 hover:shadow-sm transition-all cursor-pointer ${idx >= 3 && !isJobsExpanded ? 'hidden lg:block' : 'block'}`}
-                                >
-                                    <div className="flex justify-between items-start mb-2">
-                                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${job.type === 'Government' ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
-                                            {job.type}
-                                        </span>
-                                        <span className="text-[10px] text-neutral-500">{job.deadline}</span>
-                                    </div>
-                                    <h5 className="font-bold text-sm text-neutral-dark dark:text-white leading-relaxed mb-1 group-hover:text-primary transition-colors">
-                                        {job.title}
-                                    </h5>
-                                    <p className="text-xs text-neutral-500 mb-2">{job.organization}</p>
-                                    <div className="flex items-center gap-1 text-[10px] text-neutral-400">
-                                        <MapPin size={10} />
-                                        {job.location}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Mobile Toggle Button */}
-                        <button
-                            onClick={() => setIsJobsExpanded(!isJobsExpanded)}
-                            className="w-full mt-4 py-2 text-xs font-bold uppercase text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors lg:hidden flex items-center justify-center gap-2"
-                        >
-                            {isJobsExpanded ? (
-                                <>Show Less <ChevronUp size={14} /></>
-                            ) : (
-                                <>View All Jobs <ChevronDown size={14} /></>
-                            )}
-                        </button>
-
-                        {/* Desktop View All Link (Hidden on Mobile) */}
-                        <button className="hidden lg:block w-full mt-4 py-2 text-xs font-bold uppercase text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors">
-                            View All Jobs
-                        </button>
-                    </div>
+                    <JobsSidebar />
                 </div>
 
                 {/* Center Column: Featured Story */}
                 <div className="col-span-12 lg:col-span-6 order-1 lg:order-2">
-                    {isLoading ? (
+                    {isLoading && top20.length === 0 ? (
                         <div className="relative h-[20rem] sm:h-[34rem] w-full rounded-2xl overflow-hidden shadow-medium bg-gray-200 dark:bg-gray-800 animate-pulse">
                             <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8 w-full space-y-4">
                                 <div className="flex gap-3">
@@ -149,7 +101,7 @@ export default function HeroSection() {
                     ) : null}
                 </div>
 
-                {/* Right Column: Top Stories (Expanded to 10) */}
+                {/* Right Column: Top Stories */}
                 <div className="col-span-12 lg:col-span-3 order-3 lg:order-3 flex flex-col gap-6">
                     <div className="bg-white dark:bg-neutral-dark rounded-2xl p-5 border border-black/5 dark:border-white/5 shadow-soft h-auto lg:h-[34rem] flex flex-col">
                         <h4 className="flex items-center gap-2 text-sm font-bold uppercase tracking-widest text-primary mb-4">
@@ -157,7 +109,7 @@ export default function HeroSection() {
                             Top 20 Stories
                         </h4>
                         <div className="flex-1 overflow-y-auto pr-1 space-y-4 scrollbar-hide">
-                            {isLoading ? (
+                            {isLoading && top20.length === 0 ? (
                                 // Skeleton Loader
                                 [...Array(6)].map((_, i) => (
                                     <div key={i} className="flex gap-3 pb-3 border-b border-dashed border-neutral-200 dark:border-neutral-700 last:border-0 animate-pulse">
@@ -204,35 +156,7 @@ export default function HeroSection() {
                         </button>
                     </div>
                 </div>
-
-                {/* Bottom Row - Must Read (kept as is) */}
-                {/* <div className="col-span-12 order-4">
-                    <div className="bg-neutral-light dark:bg-neutral-dark/50 rounded-2xl p-6 sm:p-8 border border-black/5 dark:border-white/5">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-xl font-bold flex items-center gap-2 text-neutral-dark dark:text-white">
-                                <span className="w-1 h-6 bg-primary rounded-full"></span>
-                                Must Read
-                            </h3>
-                            <button className="text-xs font-bold uppercase tracking-wider text-primary hover:text-primary/80">View All</button>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                            {mustRead.map((item, idx) => (
-                                <div key={item.id} className="group cursor-pointer p-4 rounded-xl bg-white dark:bg-neutral-dark hover:shadow-medium transition-all border border-transparent hover:border-black/5 dark:hover:border-white/5">
-                                    <div className="flex items-start justify-between mb-3">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-primary bg-primary/5 px-2 py-1 rounded-md">{item.category}</span>
-                                        <span className="text-4xl font-black text-neutral-dark/5 dark:text-white/5 group-hover:text-primary/10 transition-colors">0{idx + 1}</span>
-                                    </div>
-                                    <h5 className="hindi-headline font-bold text-neutral-dark dark:text-white group-hover:text-primary transition-colors leading-relaxed">
-                                        {item.title}
-                                    </h5>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div> */}
             </div>
         </section>
     );
 }
-
-
