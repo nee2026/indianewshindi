@@ -64,9 +64,9 @@ const AuthorsSection = () => {
                             className="group relative bg-white/5 rounded-2xl p-4 md:p-6 border border-white/5 hover:border-primary/30 hover:bg-white/10 transition-all duration-300 flex flex-col items-center text-center overflow-hidden backdrop-blur-sm"
                         >
                             <Link
-                                href={`/author/${author.first_name.toLowerCase()}`}
+                                href={`/author/${author.username}`}
                                 className="absolute inset-0 z-20"
-                                aria-label={`View ${author.first_name}'s profile`}
+                                aria-label={`View ${author.username}'s profile`}
                             />
 
                             {/* Decorative Background Gradient */}

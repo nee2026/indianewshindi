@@ -159,6 +159,7 @@ export interface AuthorPost {
 }
 
 export interface AuthorResponse {
+    username: string;
     first_name: string;
     bio: string | null;
     profile_image: string | null;

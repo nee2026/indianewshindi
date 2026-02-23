@@ -1,42 +1,55 @@
-import { fetchHomepageData } from '@/services/api';
-import { MetadataRoute } from 'next';
+import { fetchHomepageData } from "@/services/api"
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://indianewshindi.com';
+export async function GET() {
+
+    const baseUrl = "https://indianewshindi.com"
 
     try {
-        // For Google News, we need articles from the last 48 hours. 
-        // We'll use the homepage recent articles as a proxy for the latest news.
-        const homepageData = await fetchHomepageData();
-        const articles = [...(homepageData.top_20 || []), ...(homepageData.trending_posts || [])];
+        const data = await fetchHomepageData()
 
-        // Remove duplicates
-        const uniqueArticles = Array.from(new Map(articles.map(item => [item.id, item])).values());
+        const articles = [
+            ...(data.top_20 || []),
+            ...(data.trending_posts || [])
+        ]
 
-        const now = new Date();
-        const fortyEightHoursAgo = new Date(now.getTime() - (48 * 60 * 60 * 1000));
+        const unique = Array.from(
+            new Map(articles.map(a => [a.id, a])).values()
+        )
 
-        // Filter for articles published within the last 48 hours
-        const recentArticles = uniqueArticles.filter(post => {
-            if (!post.date) return false;
-            const postDate = new Date(post.date);
-            return postDate >= fortyEightHoursAgo;
-        });
+        const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000)
 
-        // Next.js currently lacks native `<news:news>` namespace objects in `MetadataRoute.Sitemap` typing cleanly,
-        // but we can pass unknown extension properties or we can just return standard URLs which Google News Publisher Center can still ingest if Publisher Center is configured.
-        // As of Next 14/15, there is experimental support, but we map standard sitemap schema.
+        const recent = unique.filter(p => {
+            if (!p.date) return false
+            return new Date(p.date) >= cutoff
+        })
 
-        return recentArticles.map((post) => ({
-            url: `${baseUrl}/post/${post.id}/${post.slug}`,
-            lastModified: new Date(post.date).toISOString(),
-            priority: 0.9,
-            // Next.js standard doesn't natively expose the Google News specific XML tags without custom XML generation.
-            // A standard sitemap is usually sufficient for Publisher Center if submitted directly.
-        }));
+        const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+ xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 
-    } catch (e) {
-        console.error("Error generating news sitemap:", e);
-        return [];
+${recent.map(post => `
+<url>
+  <loc>${baseUrl}/post/${post.id}/${post.slug}</loc>
+  <news:news>
+    <news:publication>
+      <news:name>India News Hindi</news:name>
+      <news:language>hi</news:language>
+    </news:publication>
+    <news:publication_date>${new Date(post.date).toISOString()}</news:publication_date>
+    <news:title><![CDATA[${post.title}]]></news:title>
+  </news:news>
+</url>
+`).join("")}
+
+</urlset>`
+
+        return new Response(xml, {
+            headers: { "Content-Type": "application/xml" }
+        })
+
+    } catch (err) {
+        console.error("News sitemap error:", err)
+        return new Response("", { status: 500 })
     }
 }

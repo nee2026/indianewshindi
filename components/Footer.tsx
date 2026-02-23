@@ -108,9 +108,35 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Footer */}
-                <div className="pt-4 border-t border-white/20 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-neutral-500">
-                    <p>© {currentYear} India News Hindi Media Pvt Ltd. All rights reserved.</p>
+                {/* Bottom Footer Section */}
+                <div className="pt-8 border-t border-white/10 flex flex-col lg:flex-row items-center justify-between gap-6 pb-4">
+                    <div className="text-neutral-500 text-sm text-center lg:text-left order-2 lg:order-1">
+                        © {currentYear} India News Hindi Media Pvt Ltd. All rights reserved.
+                    </div>
 
+                    <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-sm order-1 lg:order-2">
+                        <div className="flex items-center gap-2 text-neutral-500">
+                            <span>Designed & Developed by</span>
+                            <Link
+                                href="https://trishikasolutions.com/"
+                                target="_blank"
+                                className="text-neutral-300 hover:text-primary transition-colors font-semibold"
+                            >
+                                Trishika Solutions
+                            </Link>
+                        </div>
+                        <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-white/10"></div>
+                        <div className="flex items-center gap-2 text-neutral-500">
+                            <span>Hiring Partner</span>
+                            <Link
+                                href="https://thehirex.com/"
+                                target="_blank"
+                                className="text-neutral-300 hover:text-primary transition-colors font-semibold"
+                            >
+                                The Hirex
+                            </Link>
+                        </div>
+                    </div>
                 </div>
             </div>
         </footer>
