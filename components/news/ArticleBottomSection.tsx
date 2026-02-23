@@ -196,7 +196,7 @@ const ArticleBottomSection: React.FC<ArticleBottomSectionProps> = ({ author, aut
                                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60">Featured Insights</span>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                {displayAuthorPosts.map((post) => (
+                                {displayAuthorPosts.slice(0,3).map((post) => (
                                     <Link key={post.id} className="group block" href={`/post/${post.id}/${post.slug}`}>
                                         <h5 className="hindi-headline font-semibold text-[15px] leading-snug text-white/90 group-hover:text-primary transition-colors line-clamp-3 mb-3">
                                             {post.title}

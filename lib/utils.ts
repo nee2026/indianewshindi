@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getAbsoluteImageUrl(url: string | undefined | null): string {
-  if (!url) return "/placeholder.jpg";
+  if (!url) return "/placeholder.png";
   if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) return url;
 
   // Fallback to https://indianewshindi.com if NEXT_PUBLIC_SITE_URL is undefined

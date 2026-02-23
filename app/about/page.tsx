@@ -124,7 +124,7 @@ export default function AboutPage() {
                 <section className="relative py-20 bg-[#321a1a] text-white overflow-hidden">
                     <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                     <div className="max-w-4xl mx-auto px-4 relative z-10 text-center">
-                        <h1 className="text-4xl md:text-5xl font-bold mb-6 font-display">About <span className="text-primary">IndianNewsHindi.com</span></h1>
+                        <h1 className="text-4xl md:text-5xl font-bold mb-6 font-display">About <span className="text-primary">IndiaNewsHindi.com</span></h1>
                         <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
                             Your trusted destination for fast, accurate, and unbiased Hindi news.
                         </p>
@@ -232,9 +232,9 @@ export default function AboutPage() {
                         <p className="text-neutral-600 dark:text-neutral-300 mb-8">
                             We value your feedback and suggestions. For inquiries, collaborations, or news submissions, contact us at:
                         </p>
-                        <a href="mailto:support@indianewshindi.com" className="inline-flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-primary-dark transition-all shadow-lg hover:shadow-primary/30 group">
+                        <a href="mailto:officialindianewshindi2026@gmail.com" className="inline-flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-primary-dark transition-all shadow-lg hover:shadow-primary/30 group">
                             <Mail size={24} />
-                            support@indianewshindi.com
+                            officialindianewshindi2026@gmail.com
                         </a>
                     </section>
 

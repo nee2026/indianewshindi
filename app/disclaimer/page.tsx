@@ -261,8 +261,8 @@ export default function DisclaimerPage() {
                             <p className="text-neutral-600 dark:text-neutral-400 mb-4">
                                 If you have questions, concerns, or want to report an issue, contact:
                             </p>
-                            <a href="mailto:support@indianewshindi.com" className="block text-primary font-bold hover:underline decoration-2 underline-offset-4 text-lg">
-                                support@indianewshindi.com
+                            <a href="mailto:officialindianewshindi2026@gmail.com" className="block text-primary font-bold hover:underline decoration-2 underline-offset-4 text-lg">
+                                officialindianewshindi2026@gmail.com
                             </a>
                         </section>
                     </div>

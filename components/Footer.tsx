@@ -1,6 +1,6 @@
 "use client";
 
-import { Facebook, Camera, Twitter } from "lucide-react";
+import { Twitter, Youtube } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -45,16 +45,20 @@ export default function Footer() {
 
                         <div className="flex gap-4">
                             {[
-                                { icon: Facebook, href: "#" },
-                                { icon: Twitter, href: "#" },
-                                { icon: Camera, href: "#" } // Instagram placeholder
+                                { icon: Youtube, href: "https://www.youtube.com/@indianewshindiofficial" },
+                                { icon: Twitter, href: "https://x.com/indianewshindi_" },
                             ].map((social, idx) => (
                                 <Link
                                     key={idx}
                                     href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     className="w-12 h-12 rounded-full bg-white/5 border border-white/5 flex items-center justify-center hover:bg-primary hover:border-primary hover:-translate-y-1 transition-all duration-300 group"
                                 >
-                                    <social.icon size={20} className="text-neutral-400 group-hover:text-white transition-colors" />
+                                    <social.icon
+                                        size={20}
+                                        className="text-neutral-400 group-hover:text-white transition-colors"
+                                    />
                                 </Link>
                             ))}
                         </div>
@@ -64,12 +68,12 @@ export default function Footer() {
                     <div className="space-y-8">
                         <h4 className="text-lg font-bold text-white flex items-center gap-3">
                             <span className="w-8 h-[2px] bg-primary"></span>
-                            Sections
+                            Categories
                         </h4>
                         <ul className="space-y-4">
-                            {['India News', 'Politics', 'Entertainment', 'Sports', 'Business', 'Technology'].map((item) => (
+                            {['India', 'Politics', 'Education', 'Sports', 'Business', 'Technology'].map((item) => (
                                 <li key={item}>
-                                    <Link href="#" className="text-neutral-400 hover:text-primary hover:pl-2 transition-all duration-300 block text-base">
+                                    <Link href={`/category/${item.toLowerCase()}`} className="text-neutral-400 hover:text-primary hover:pl-2 transition-all duration-300 block text-base">
                                         {item}
                                     </Link>
                                 </li>
