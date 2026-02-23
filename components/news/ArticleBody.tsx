@@ -105,18 +105,18 @@ const ArticleBody: React.FC<ArticleBodyProps> = ({ htmlContent }) => {
     prose-headings:font-serif
 
     /* H2 — MAIN SECTION */
-    prose-h2:text-gray-900
+    prose-h2:text-red-900
     prose-h2:border-l-3 prose-h2:border-gray-300
     prose-h2:pl-0
     prose-h2:mt-4 prose-h2:mb-2
     prose-h2:leading-snug
 
     /* H3 — SUB SECTION */
-    prose-h3:text-gray-800
+    prose-h3:text-red-900
     prose-h3:mt-4 prose-h3:mb-2
 
     /* H4 — MINOR */
-    prose-h4:text-gray-700
+    prose-h4:text-red-900
     prose-h4:mt-6 prose-h4:mb-2
 
     /* PARAGRAPH */
