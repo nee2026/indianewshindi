@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "indianewshindi.com",
+        hostname: "master.indianewshindi.com",
         port: "",
         pathname: "/**",
       },
