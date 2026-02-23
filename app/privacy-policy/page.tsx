@@ -1,14 +1,112 @@
+import { ArrowRight, Calendar, Cookie, Eye, FileText, Globe, Mail, Scale, ShieldCheck,Lock } from "lucide-react"
+import { Metadata } from "next"
 
-import React from 'react';
-import { ShieldCheck, Lock, Eye, FileText, Mail, Globe, Calendar, Cookie, Scale, ArrowRight } from 'lucide-react';
+/* =====================================================
+   FORCE STATIC GENERATION
+===================================================== */
+export const dynamic = "force-static"
 
-export const metadata = {
-    title: 'Privacy Policy - India News Hindi',
-    description: 'Privacy Policy for India News Hindi explaining how we collect, use, and protect your information.',
-};
+/* =====================================================
+   SEO METADATA
+===================================================== */
+export const metadata: Metadata = {
+  title: "Privacy Policy | India News Hindi",
+  description:
+    "Read the Privacy Policy of India News Hindi to understand how we collect, use, and protect your personal information.",
 
+  alternates: {
+    canonical: "https://indianewshindi.com/privacy-policy"
+  },
+
+  robots: {
+    index: true,
+    follow: true
+  },
+
+  openGraph: {
+    title: "Privacy Policy | India News Hindi",
+    description:
+      "Learn how India News Hindi protects your privacy and personal data.",
+    url: "https://indianewshindi.com/privacy-policy",
+    siteName: "India News Hindi",
+    type: "website",
+    images: [
+      {
+        url: "https://indianewshindi.com/icon2.png",
+        width: 1200,
+        height: 630,
+        alt: "Privacy Policy"
+      }
+    ]
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy | India News Hindi",
+    description:
+      "Read the official privacy policy of India News Hindi.",
+    images: ["https://indianewshindi.com/icon2.png"]
+  }
+}
+
+/* =====================================================
+   PAGE
+===================================================== */
 export default function PrivacyPolicyPage() {
-    return (
+
+  /* =====================================================
+     LEGAL PAGE SCHEMA
+  ===================================================== */
+  const webPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: "Privacy Policy",
+    url: "https://indianewshindi.com/privacy-policy",
+    description:
+      "Privacy policy explaining how India News Hindi collects and protects user data.",
+    inLanguage: "en-IN",
+    isPartOf: {
+      "@type": "WebSite",
+      name: "India News Hindi",
+      url: "https://indianewshindi.com"
+    }
+  }
+
+  /* =====================================================
+     BREADCRUMB SCHEMA
+  ===================================================== */
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: "https://indianewshindi.com"
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Privacy Policy",
+        item: "https://indianewshindi.com/privacy-policy"
+      }
+    ]
+  }
+
+  return (
+    <>
+      {/* Page schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+
+      {/* Breadcrumb schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
         <main className="bg-neutral-50 dark:bg-neutral-900 min-h-screen font-sans">
             {/* Hero Section */}
             <section className="relative py-20 bg-[#321a1a] text-white overflow-hidden">
@@ -215,5 +313,6 @@ export default function PrivacyPolicyPage() {
                 </div>
             </div>
         </main>
+    </>
     );
 }

@@ -86,8 +86,6 @@ export default function Footer() {
                             {[
                                 { name: 'About Us', href: '/about' },
                                 { name: 'Contact', href: '/contact' },
-                                { name: 'Careers', href: '#' },
-                                { name: 'Advertise', href: '#' },
                                 { name: 'Privacy Policy', href: '/privacy-policy' },
                                 { name: 'Terms of Service', href: '/terms-conditions' },
                                 { name: 'Disclaimer', href: '/disclaimer' },
