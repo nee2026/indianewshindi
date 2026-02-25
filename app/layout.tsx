@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Work_Sans, Tiro_Devanagari_Hindi } from "next/font/google";
 import "./globals.css";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const workSans = Work_Sans({
   variable: "--font-work-sans",
@@ -123,6 +125,8 @@ export default function RootLayout({
       >
         <Header />
         {children}
+        <Analytics />
+        <SpeedInsights />
         <Footer />
 
         {/* Google Translate anchor (must exist once globally) */}
