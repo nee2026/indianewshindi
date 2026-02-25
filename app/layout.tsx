@@ -99,6 +99,7 @@ const jsonLd = {
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export default function RootLayout({
   children,
@@ -112,6 +113,10 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* Google AdSense */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3294018561004411" crossOrigin="anonymous"></script>
+        {/* Google Analytics */}
+        <GoogleAnalytics gaId="G-0FNM3993LW" />
       </head>
       <body
         className={`${workSans.variable} ${tiroDevanagari.variable} antialiased font-display bg-background-light dark:bg-background-dark text-neutral-dark dark:text-background-light`}

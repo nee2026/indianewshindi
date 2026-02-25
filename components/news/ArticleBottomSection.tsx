@@ -145,7 +145,7 @@ const ArticleBottomSection: React.FC<ArticleBottomSectionProps> = ({ author, aut
                             </div>
                         </div>
                     </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 ">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                         {/* Jobs Section */}
                         <div className="space-y-6">
                             <div className="flex items-baseline justify-between">
