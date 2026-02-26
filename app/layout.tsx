@@ -77,9 +77,6 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: "India News",
-  },
-  verification: {
-    google: "YOUR_GOOGLE_VERIFICATION_CODE", // Placeholder
   }
 };
 
