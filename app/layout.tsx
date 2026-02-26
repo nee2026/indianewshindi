@@ -4,6 +4,7 @@ import "./globals.css";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Analytics } from "@vercel/analytics/next";
+import GoogleAnalyticsTracker from "@/components/GoogleAnalyticsTracker";
 
 const workSans = Work_Sans({
   variable: "--font-work-sans",
@@ -124,6 +125,7 @@ export default function RootLayout({
         className={`${workSans.variable} ${tiroDevanagari.variable} antialiased font-display bg-background-light dark:bg-background-dark text-neutral-dark dark:text-background-light`}
       >
         <Header />
+        <GoogleAnalyticsTracker />
         {children}
         <Analytics />
         <SpeedInsights />
