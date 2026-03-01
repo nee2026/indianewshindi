@@ -84,7 +84,9 @@ export default function JobView({ job, pageNum }: Props) {
                                         <p className="text-xs text-neutral-500 uppercase tracking-widest font-bold mb-1">Location</p>
                                         <div className="flex items-center gap-2 text-sm font-semibold text-neutral-dark dark:text-white">
                                             <MapPin size={16} className="text-orange-600" />
-                                            <span className="truncate">{job.city_display}</span>
+                                            <span className="truncate">
+                                                {job.city_display?.split(",")?.[0] ?? "Location not specified"}
+                                            </span>
                                         </div>
                                     </div>
                                     <div>

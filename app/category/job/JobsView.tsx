@@ -143,7 +143,9 @@ export default function JobsCategoryPage({
                                     <div className="space-y-2 mt-auto pt-4 border-t border-dashed border-neutral-200 dark:border-neutral-700">
                                         <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
                                             <MapPin size={14} className="text-neutral-400" />
-                                            <span className="truncate">{job.city_display}</span>
+                                            <span className="truncate">
+                                                {job.city_display?.split(",")?.[0] ?? "Location not specified"}
+                                            </span>
                                         </div>
                                         <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
                                             <IndianRupee size={14} className="text-neutral-400" />
