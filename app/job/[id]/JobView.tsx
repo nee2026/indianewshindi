@@ -42,8 +42,8 @@ export default function JobView({ job, pageNum }: Props) {
                                     <span className="text-xs font-bold px-3 py-1 bg-primary/10 text-primary rounded-full uppercase tracking-wider">
                                         {job.job_type_display}
                                     </span>
-                                    <span className="text-xs font-bold px-3 py-1 bg-neutral-100 dark:bg-white/10 text-neutral-600 dark:text-neutral-400 rounded-full uppercase tracking-wider">
-                                        {job.job_category_display.split('(')[0].trim()}
+                                    <span className="text-[9px] font-medium text-neutral-400 pl-1">
+                                        {job.job_category_display?.split('(')?.[0]?.trim() ?? "Category not specified"}
                                     </span>
                                     {job.expire_date && (
                                         <span className="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-500/10 px-3 py-1 rounded-full flex items-center gap-1">

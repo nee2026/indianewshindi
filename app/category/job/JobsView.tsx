@@ -121,7 +121,7 @@ export default function JobsCategoryPage({
                                                 {job.job_type_display}
                                             </span>
                                             <span className="text-[9px] font-medium text-neutral-400 pl-1">
-                                                {job.job_category_display.split('(')[0].trim()}
+                                                {job.job_category_display?.split('(')?.[0]?.trim() ?? "Category not specified"}
                                             </span>
                                         </div>
                                         {job.expire_date && (
