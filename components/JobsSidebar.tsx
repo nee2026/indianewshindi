@@ -81,7 +81,9 @@ export default function JobsSidebar() {
 
                             <div className="flex items-center gap-1.5 text-[10px] text-neutral-400 mt-2 pt-2 border-t border-black/[0.02] dark:border-white/[0.02]">
                                 <MapPin size={10} className="text-primary/60" />
-                                <span className="truncate">{job.city_display.split(',')[0]}</span>
+                                <span className="truncate">
+                                    {job.city_display?.split(",")?.[0] ?? "Location not specified"}
+                                </span>
                             </div>
                         </Link>
                     ))
