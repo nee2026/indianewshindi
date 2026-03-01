@@ -102,8 +102,13 @@ export default function Footer() {
                                 </li>
                             ))}
                             <li>
-                                <Link href="/login" className="text-white font-bold hover:text-primary hover:pl-2 transition-all duration-300 block text-base flex items-center gap-2">
-                                    Login / Register
+                                <Link
+                                    href="https://master.indianewshindi.com/login/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-white font-bold hover:text-primary hover:pl-2 transition-all duration-300 block text-base flex items-center gap-2"
+                                >
+                                    Login
                                 </Link>
                             </li>
                         </ul>
